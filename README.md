@@ -1,2 +1,2 @@
 # Machine_Learning-
-Neste repositório vou adicionar minha evolução estudando mais sobre machine learning 
+Neste repositório vou adicionar minha evolução a partir das aplicações machine learning em alguns conjuntos de dados. 
