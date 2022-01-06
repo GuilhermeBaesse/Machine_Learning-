@@ -62,4 +62,26 @@ fancyRpartPlot(modelo3$finalModel)
 
 modeloml1<-train(as.factor(NoYes)~humid+temp+trees, data=denguetreino, metodh="glm")
 
-modeloml2<-train(as.factor(NoYes)~humid+temp+trees, data=denguetreino, metodh="glm")
+modeloml2<-train(as.factor(NoYes)~humid+temp+trees, data=denguetreino, metodh="ranger")
+
+modeloml3<-train(as.factor(NoYes)~humid+temp+trees, data=denguetreino, metodh="bayesglm")
+
+pGLM<-predict(modeloml1, dengueteste)
+pRANGER<-predict(modeloml2, dengueteste)
+pBAYES<-predict(modeloml3, dengueteste)
+
+confusionMatrix(factor(pGLM), factor(dengueteste$NoYes)) # 0.8622
+
+confusionMatrix(factor(pRANGER), factor(dengueteste$NoYes)) # 0.8588
+
+confusionMatrix(factor(pBAYES), factor(dengueteste$NoYes)) # 0.8639
+
+library(pROC)
+
+plot.roc(dengueteste$NoYes, as.numeric(pRANGER), print.auc=TRUE)
+plot.roc(dengueteste$NoYes, as.numeric(pGLM), print.auc=TRUE)
+plot.roc(dengueteste$NoYes, as.numeric(pBAYES), print.auc=TRUE)
+
+modeloml2<-train(as.factor(NoYes)~humid+temp+trees, data=denguetreino, metodh="ranger", importance="impurity")
+
+plot(varImp(modeloml2, scale=FALSE))
